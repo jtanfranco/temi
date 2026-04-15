@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Retainer Flywheel — Camera to Cash | Temi</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #F5A623;
+    --gold-dim: #c47d0a;
+    --bg: #080808;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --text: #FFFFFF;
+    --muted: #888888;
+    --border: #2a2a2a;
+    --red: #E53E3E;
+    --green: #38A169;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    user-select: none;
+  }
+
+  /* ── SLIDE CONTAINER ── */
+  #deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    text-align: center;
+    background: var(--bg);
+  }
+
+  .slide.active { display: flex; }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.8;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: clamp(36px, 5vw, 72px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: clamp(28px, 3.5vw, 52px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    font-size: clamp(20px, 2.5vw, 36px);
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 16px;
+    color: var(--gold);
+  }
+
+  p {
+    font-size: clamp(16px, 1.8vw, 24px);
+    line-height: 1.6;
+    color: #cccccc;
+    max-width: 800px;
+  }
+
+  .accent { color: var(--gold); }
+  .strike { text-decoration: line-through; color: var(--muted); }
+  .big-stat {
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  /* ── BULLET LIST ── */
+  .bullets {
+    list-style: none;
+    text-align: left;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 720px;
+    width: 100%;
+  }
+
+  .bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: clamp(16px, 1.8vw, 22px);
+    line-height: 1.5;
+    color: #dddddd;
+  }
+
+  .bullets li::before {
+    content: '▸';
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 14px;
+  }
+
+  /* ── TWO COLUMN ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    width: 100%;
+    max-width: 960px;
+    margin-top: 16px;
+  }
+
+  .col-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: left;
+  }
+
+  .col-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    color: var(--muted);
+  }
+
+  .col-card.bad h4 { color: #e57373; }
+  .col-card.good h4 { color: var(--gold); }
+
+  .col-card .stat {
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .col-card.good .stat { color: var(--gold); }
+
+  .col-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .col-card li {
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .col-card.bad li::before { content: '✗'; color: #e57373; }
+  .col-card.good li::before { content: '✓'; color: var(--gold); }
+
+  /* ── THREE BOXES ── */
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 20px;
+  }
+
+  .box {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 24px;
+    text-align: left;
+  }
+
+  .box .icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .box h4 {
+    font-size: clamp(15px, 1.5vw, 20px);
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .box p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ── FLYWHEEL DIAGRAM ── */
+  .flywheel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .fw-step {
+    background: var(--bg3);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .fw-step .num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .fw-step span {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .fw-arrow {
+    font-size: 24px;
+    color: var(--gold);
+    margin: 0 12px;
+  }
+
+  .fw-center {
+    background: var(--gold);
+    color: var(--bg);
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 13px;
+    margin-left: 12px;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  /* ── STORY CARD ── */
+  .story-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 16px;
+    padding: 36px 40px;
+    text-align: left;
+    max-width: 720px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .story-card .name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .story-card .result {
+    font-size: clamp(24px, 2.8vw, 40px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .story-card .backstory {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── MODULE CARD ── */
+  .module-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    max-width: 800px;
+    width: 100%;
+    text-align: left;
+    margin-top: 12px;
+  }
+
+  .module-badge {
+    background: var(--gold);
+    color: var(--bg);
+    border-radius: 12px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .bonus-badge {
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+  }
+
+  .module-content h4 {
+    font-size: clamp(16px, 1.8vw, 22px);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .module-content p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 10px;
+    max-width: none;
+  }
+
+  .module-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  /* ── STACK SLIDE ── */
+  .stack-table {
+    width: 100%;
+    max-width: 700px;
+    border-collapse: collapse;
+    margin-top: 16px;
+    text-align: left;
+  }
+
+  .stack-table tr {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stack-table td {
+    padding: 10px 0;
+    font-size: 15px;
+    color: #cccccc;
+  }
+
+  .stack-table td:last-child {
+    text-align: right;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .stack-table .total-row td {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    padding-top: 16px;
+    border-bottom: none;
+  }
+
+  .stack-table .price-row td {
+    font-size: clamp(22px, 2.5vw, 36px);
+    font-weight: 900;
+    color: var(--gold);
+    border-bottom: none;
+    padding-top: 8px;
+  }
+
+  /* ── GUARANTEE ── */
+  .guarantee-box {
+    background: linear-gradient(135deg, #1a1200, #0a0a0a);
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    padding: 40px 48px;
+    max-width: 760px;
+    width: 100%;
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  .guarantee-box .badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .guarantee-box h3 {
+    font-size: clamp(20px, 2.2vw, 30px);
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .guarantee-box p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #cccccc;
+    max-width: none;
+  }
+
+  /* ── CTA BUTTON ── */
+  .cta-btn {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--bg);
+    font-size: clamp(16px, 1.8vw, 22px);
+    font-weight: 800;
+    padding: 20px 48px;
+    border-radius: 12px;
+    margin-top: 28px;
+    letter-spacing: -0.3px;
+    border: none;
+    cursor: default;
+  }
+
+  /* ── PATHS ── */
+  .two-paths {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 20px;
+  }
+
+  .path-card {
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: left;
+  }
+
+  .path-card.bad {
+    background: #120808;
+    border: 1px solid #3a1a1a;
+  }
+
+  .path-card.good {
+    background: #0a1200;
+    border: 1px solid #1a3a0a;
+  }
+
+  .path-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .path-card.bad h4 { color: #e57373; }
+  .path-card.good h4 { color: #68d391; }
+
+  .path-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .path-card li {
+    font-size: 15px;
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .path-card.bad li::before { content: '✗'; color: #e57373; flex-shrink: 0; }
+  .path-card.good li::before { content: '✓'; color: #68d391; flex-shrink: 0; }
+
+  /* ── STATS ROW ── */
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-pill {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 28px;
+    text-align: center;
+  }
+
+  .stat-pill .num {
+    font-size: clamp(22px, 2.5vw, 34px);
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-pill .label {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── HOLDING/PRE-SHOW ── */
+  .pre-show {
+    background: radial-gradient(ellipse at center, #1a1200 0%, #080808 70%);
+  }
+
+  .pre-show h1 {
+    font-size: clamp(28px, 4vw, 60px);
+    color: var(--gold);
+  }
+
+  /* ── URGENCY ── */
+  .urgency-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+    max-width: 640px;
+    width: 100%;
+  }
+
+  .urgency-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-size: clamp(15px, 1.6vw, 18px);
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .urgency-item .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── QUOTE SLIDE ── */
+  .quote-slide {
+    font-size: clamp(22px, 3vw, 44px);
+    font-weight: 700;
+    line-height: 1.3;
+    font-style: italic;
+    color: #dddddd;
+    max-width: 800px;
+  }
+
+  .quote-slide::before, .quote-slide::after {
+    content: '"';
+    color: var(--gold);
+    font-size: 1.2em;
+  }
+
+  /* ── ROADMAP ── */
+  .roadmap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .roadmap-step {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 20px;
+    width: 200px;
+    text-align: center;
+  }
+
+  .roadmap-step .icon { font-size: 32px; margin-bottom: 10px; display: block; }
+  .roadmap-step .title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .roadmap-step .sub { font-size: 13px; color: var(--muted); }
+
+  .roadmap-arrow { font-size: 20px; color: var(--gold); margin: 0 12px; }
+
+  /* ── CALENDAR GRAPHIC ── */
+  .month-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 8px 0;
+  }
+
+  .month-label {
+    font-size: 13px;
+    color: var(--muted);
+    width: 70px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .month-bar-container {
+    flex: 1;
+    height: 36px;
+    background: var(--bg3);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+  }
+
+  .month-bar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* ── SECTION DIVIDER SLIDES ── */
+  .section-divider {
+    background: radial-gradient(ellipse at 50% 50%, #1a0e00 0%, #080808 65%);
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+    z-index: 100;
+  }
+
+  /* ── CONTROLS ── */
+  #controls {
+    position: fixed;
+    bottom: 16px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  #slide-counter {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: monospace;
+  }
+
+  .ctrl-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+
+  .ctrl-btn:hover { background: var(--border); color: var(--text); }
+
+  /* ── NOTES PANEL ── */
+  #notes-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0f0f0f;
+    border-top: 2px solid var(--gold);
+    padding: 16px 32px;
+    display: none;
+    z-index: 200;
+    max-height: 35vh;
+    overflow-y: auto;
+  }
+
+  #notes-panel.visible { display: block; }
+
+  #notes-panel h5 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  #notes-content {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #cccccc;
+  }
+
+  /* ── KEYBOARD HINT ── */
+  #kb-hint {
+    position: fixed;
+    bottom: 16px;
+    left: 20px;
+    font-size: 11px;
+    color: #444;
+    z-index: 100;
+  }
+
+  /* ── SECTION BADGE ── */
+  .s-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--bg);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+
+  /* ── FALSE BELIEF / TRUTH ── */
+  .belief-card {
+    max-width: 760px;
+    width: 100%;
+    background: var(--bg3);
+    border-radius: 16px;
+    padding: 36px 40px;
+    text-align: left;
+    margin-top: 16px;
+  }
+
+  .belief-card .tag {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .belief-card.false .tag { color: #e57373; }
+  .belief-card.true .tag { color: var(--gold); }
+  .belief-card.false { border-left: 4px solid #e57373; }
+  .belief-card.true { border-left: 4px solid var(--gold); }
+
+  .belief-card .text {
+    font-size: clamp(18px, 2vw, 26px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  /* ── CHAT ENGAGEMENT ── */
+  .chat-prompt {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 40px;
+    max-width: 680px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .chat-prompt .chat-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .chat-prompt p {
+    font-size: clamp(18px, 2vw, 26px);
+    font-weight: 700;
+    color: var(--text);
+    max-width: none;
+  }
+
+  .chat-prompt .hint {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 10px;
+    max-width: none;
+  }
+
+  /* ── FINAL CTA ── */
+  .final-cta-slide {
+    background: radial-gradient(ellipse at center, #1a0e00, #080808);
+  }
+
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- SLIDE 0: PRE-SHOW HOLDING -->
+  <div class="slide pre-show" data-notes="Start 3 min early. Drop your city in chat. Play lofi music softly. Run poll: 'How much are you making per month? A) Under $2K  B) $2K–$5K  C) $5K–$10K  D) $10K+'. Acknowledge city names as they come in.">
+    <div class="section-label">PRE-SHOW</div>
+    <div class="eyebrow">Camera to Cash · Live Webinar</div>
+    <h1>The Retainer Flywheel</h1>
+    <p style="font-size:clamp(16px,2vw,26px); color:#aaa; margin-top:8px; margin-bottom:36px;">We start in just a few minutes</p>
+    <div class="chat-prompt" style="text-align:center;">
+      <div class="chat-icon">💬</div>
+      <p>Drop your city in the chat — where are you joining from?</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: PATTERN INTERRUPT -->
+  <div class="slide" data-notes="Pause 3 FULL seconds after the opening question. Let it sit in silence. This is the hook. Don't rush it.">
+    <div class="section-label">THE HOOK</div>
+    <h1 style="font-size:clamp(40px,6vw,84px);">What if every client<br>you landed…<br><span class="accent">stayed?</span></h1>
+  </div>
+
+  <!-- SLIDE 2: THE PROMISE -->
+  <div class="slide" data-notes="'By the end of this webinar, you're going to have the exact 3-step system I used to go from $200 in my bank account to doing $30K to $50K a month in recurring income. Not theory. A system.'">
+    <div class="section-label">THE HOOK</div>
+    <div class="eyebrow">By the end of this webinar</div>
+    <h2>You'll have the exact 3-step system to convert one-off clients into <span class="accent">$5K–$10K monthly retainers</span> — starting with clients you could land this week.</h2>
+  </div>
+
+  <!-- SLIDE 3: WHO THIS IS FOR -->
+  <div class="slide" data-notes="'If that's not where you are, no worries. But if that IS you — stay locked in for the next 90 minutes.'">
+    <div class="section-label">THE HOOK</div>
+    <div class="eyebrow">This is for you if...</div>
+    <ul class="bullets" style="max-width:640px;">
+      <li>You're a videographer making <strong>$2K–$5K/month</strong></li>
+      <li>You're working too many hours for <strong>too little predictability</strong></li>
+      <li>You're ready to build something that <strong>compounds instead of resets</strong></li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 4: CREDIBILITY STACK -->
+  <div class="slide" data-notes="Keep it under 90 seconds. Humble but specific. Pause hard on '$200.' The contrast is the point.">
+    <div class="section-label">THE HOOK</div>
+    <div class="eyebrow">Meet Your Host</div>
+    <h2>I'm <span class="accent">Temi</span>.</h2>
+    <p style="margin-top:12px; max-width:680px;">Shot for Future · Lil Baby · Steve Harvey · Cam Newton · Real Housewives</p>
+    <div class="stats-row" style="margin-top:28px;">
+      <div class="stat-pill">
+        <div class="num">$200</div>
+        <div class="label">in my account after a major shoot</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num">10</div>
+        <div class="label">retainer clients today</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num">$50K+</div>
+        <div class="label">recurring monthly revenue</div>
+      </div>
+    </div>
+    <p style="margin-top:20px; font-style:italic; color:var(--muted);">Same skills. Same gear. Different structure.</p>
+  </div>
+
+  <!-- SLIDE 5: ENGAGEMENT HOOK -->
+  <div class="slide" data-notes="Read numbers aloud as they come in. Then hit them with the second question: 'Now... how many of those clients are still paying you today?' Pause. 'Probably zero. That's not a talent problem. That's a structure problem.'">
+    <div class="section-label">THE HOOK</div>
+    <div class="chat-prompt">
+      <div class="chat-icon">💬</div>
+      <p>How many clients have you worked with in the last 12 months?</p>
+      <p class="hint" style="margin-top:16px;">Drop a number in the chat.</p>
+      <p class="hint" style="margin-top:12px; font-size:16px; color:#aaa;">Now — how many of those clients are <strong>still paying you today?</strong></p>
+    </div>
+    <p style="margin-top:24px; font-size:clamp(18px,2vw,28px); font-weight:700;">That gap is what we're closing today.</p>
+  </div>
+
+  <!-- SLIDE 6: ROADMAP -->
+  <div class="slide" data-notes="Quick slide. Set expectations. 'We've got a lot to cover and 90 minutes to do it. Let's go.'">
+    <div class="section-label">THE HOOK</div>
+    <div class="eyebrow">Today's Roadmap</div>
+    <div class="roadmap">
+      <div class="roadmap-step">
+        <span class="icon">🔍</span>
+        <div class="title">The Problem</div>
+        <div class="sub">Why talented videographers stay broke</div>
+      </div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-step">
+        <span class="icon">🔄</span>
+        <div class="title">The System</div>
+        <div class="sub">The 3-step Retainer Flywheel</div>
+      </div>
+      <div class="roadmap-arrow">→</div>
+      <div class="roadmap-step">
+        <span class="icon">🚀</span>
+        <div class="title">The Path</div>
+        <div class="sub">How to implement it in your business</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: THE BIG DOMINO -->
+  <div class="slide" data-notes="WRITE THIS DOWN moment. Pause after 'structure problem.' This is the belief shift that everything else builds on. Don't rush past it.">
+    <div class="section-label">THE BIG IDEA</div>
+    <p class="eyebrow">Write this down</p>
+    <h1>You don't have a<br><span style="color:var(--muted); text-decoration:line-through;">skill</span> problem.<br>You have a <span class="accent">structure</span> problem.</h1>
+  </div>
+
+  <!-- SLIDE 8: FEAST OR FAMINE MATH -->
+  <div class="slide" data-notes="Let the math do the talking. 20 clients vs 5 clients for the same $10K. The structure matters more than the skill.">
+    <div class="section-label">THE PROBLEM</div>
+    <div class="eyebrow">The Math Doesn't Lie</div>
+    <div class="two-col">
+      <div class="col-card bad">
+        <h4>Project Model</h4>
+        <div class="stat">20 clients</div>
+        <div style="font-size:18px; font-weight:700; color:var(--muted); margin-bottom:12px;">× $500 = $10K</div>
+        <ul>
+          <li>20 discovery calls</li>
+          <li>20 proposals</li>
+          <li>20 shoots & edits</li>
+          <li>20 invoices</li>
+          <li>Reset next month</li>
+        </ul>
+      </div>
+      <div class="col-card good">
+        <h4>Retainer Model</h4>
+        <div class="stat">5 clients</div>
+        <div style="font-size:18px; font-weight:700; color:var(--gold); margin-bottom:12px;">× $2,000/mo = $10K</div>
+        <ul>
+          <li>5 relationships</li>
+          <li>Predictable scope</li>
+          <li>Recurring rhythm</li>
+          <li>Auto-renews monthly</li>
+          <li>Compounds over time</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: UBER DRIVER ANALOGY -->
+  <div class="slide" data-notes="This analogy lands hard. Let it breathe. 'The difference isn't talent. It's positioning.'">
+    <div class="section-label">THE PROBLEM</div>
+    <div class="two-col" style="margin-top:0; max-width:900px; align-items:start;">
+      <div class="col-card bad">
+        <h4>Uber Driver</h4>
+        <div style="font-size:40px; margin:16px 0;">🚕</div>
+        <p style="font-size:16px; color:#bbb; line-height:1.6; max-width:none;">Booked when needed. One trip. Forgotten by the next project. Replaced by whoever is cheaper.</p>
+      </div>
+      <div class="col-card good">
+        <h4>Private Driver</h4>
+        <div style="font-size:40px; margin:16px 0;">🚘</div>
+        <p style="font-size:16px; color:#bbb; line-height:1.6; max-width:none;">Same client every month. Trusted. Valued. Irreplaceable. Not a cost — a relationship.</p>
+      </div>
+    </div>
+    <h2 style="margin-top:28px;">The difference isn't <span style="text-decoration:line-through; color:var(--muted);">talent</span>.<br>It's <span class="accent">positioning</span>.</h2>
+  </div>
+
+  <!-- SLIDE 10: THE RESET PROBLEM -->
+  <div class="slide" data-notes="'Every month you wake up at zero. Every month you're hunting. A year of grinding and you're in the exact same spot. That ends today.'">
+    <div class="section-label">THE PROBLEM</div>
+    <div class="eyebrow">The Monthly Reset</div>
+    <div style="max-width:600px; width:100%; margin-top:16px;">
+      <div class="month-row">
+        <div class="month-label">Month 1</div>
+        <div class="month-bar-container">
+          <div class="month-bar" style="width:70%; background:linear-gradient(90deg,#333,#555); color:#888;">$0 → hustle → $4K</div>
+        </div>
+      </div>
+      <div class="month-row">
+        <div class="month-label">Month 2</div>
+        <div class="month-bar-container">
+          <div class="month-bar" style="width:60%; background:linear-gradient(90deg,#333,#555); color:#888;">$0 → hustle → $3K</div>
+        </div>
+      </div>
+      <div class="month-row">
+        <div class="month-label">Month 3</div>
+        <div class="month-bar-container">
+          <div class="month-bar" style="width:80%; background:linear-gradient(90deg,#333,#555); color:#888;">$0 → hustle → $5K</div>
+        </div>
+      </div>
+    </div>
+    <h3 style="margin-top:28px; color:var(--text);">None of it <span class="accent">compounds.</span></h3>
+    <p style="margin-top:8px;">A year of grinding and you're in the exact same spot.</p>
+  </div>
+
+  <!-- SLIDE 11: SECRET 1 TITLE -->
+  <div class="slide section-divider" data-notes="'Secret number one. This is about the vehicle — the model itself. And I need to bust the biggest myth in videography first.'">
+    <div class="s-badge">Secret #1</div>
+    <h1>Why the Retainer Model Is<br>the <span class="accent">Only Model</span><br>That Compounds</h1>
+  </div>
+
+  <!-- SLIDE 12: FALSE BELIEF 1 -->
+  <div class="slide" data-notes="'I believed this too. For two years I chased clients. Big name after big name. The problem wasn't the number of clients. It was that none of them stayed.'">
+    <div class="section-label">SECRET #1</div>
+    <div class="belief-card false">
+      <div class="tag">❌ False Belief</div>
+      <div class="text">"I just need to find more clients."</div>
+    </div>
+    <p style="margin-top:24px; max-width:680px;">More DMs. More cold emails. More posting. Two years of chasing. The bank account never reflected it.</p>
+  </div>
+
+  <!-- SLIDE 13: TRUTH 1 -->
+  <div class="slide" data-notes="'One retained client at $3,000 a month is worth more than 10 one-off projects at $300 each. Less work. More money. More predictability. This is the vehicle shift.'">
+    <div class="section-label">SECRET #1</div>
+    <div class="belief-card true">
+      <div class="tag">✓ The Truth</div>
+      <div class="text">You don't need more clients.<br>You need the <span class="accent">same clients to pay you every month.</span></div>
+    </div>
+    <p style="margin-top:24px;">1 retained client at $3K/month &gt; 10 one-off projects at $300 each.</p>
+  </div>
+
+  <!-- SLIDE 14: EPIPHANY BRIDGE -->
+  <div class="slide" data-notes="Get personal here. The discovery moment. 'They weren't selling deliverables. They were selling outcomes. The client wasn't buying a video. They were buying growth. That was the shift.'">
+    <div class="section-label">SECRET #1</div>
+    <div style="max-width:680px; text-align:left;">
+      <div class="eyebrow">The Discovery</div>
+      <p class="quote-slide" style="font-size:clamp(20px,2.5vw,34px); max-width:none;">I studied how agencies, consultants, and coaches built predictable revenue.</p>
+      <p style="margin-top:24px; font-size:clamp(15px,1.6vw,20px);">They weren't selling deliverables. They were selling <strong style="color:var(--gold);">outcomes</strong>. Not a video — <strong style="color:var(--gold);">growth</strong>. That was the shift.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 15: WHAT BRANDS WANT -->
+  <div class="slide" data-notes="'They want a partner. They just haven't found the right person positioned that way. That person can be you.'">
+    <div class="section-label">SECRET #1</div>
+    <div class="eyebrow">What Brands Actually Want</div>
+    <div class="three-col">
+      <div class="box">
+        <span class="icon">😤</span>
+        <h4>Stop briefing a new freelancer every month</h4>
+        <p>The revolving door is exhausting</p>
+      </div>
+      <div class="box">
+        <span class="icon">📉</span>
+        <h4>Consistent quality — not a lottery</h4>
+        <p>Rotating vendors = inconsistent results</p>
+      </div>
+      <div class="box">
+        <span class="icon">🤝</span>
+        <h4>Someone who truly knows the brand</h4>
+        <p>A real partner, not a vendor</p>
+      </div>
+    </div>
+    <p style="margin-top:28px; font-size:clamp(16px,1.8vw,22px); font-weight:700;">That person can be <span class="accent">you.</span></p>
+  </div>
+
+  <!-- SLIDE 16: FLYWHEEL OVERVIEW -->
+  <div class="slide" data-notes="'When all three work together, clients come to you, they pay monthly, and they stay. Let me walk through each one.'">
+    <div class="section-label">SECRET #1</div>
+    <div class="eyebrow">The System</div>
+    <h2>The <span class="accent">Retainer Flywheel</span></h2>
+    <div class="flywheel">
+      <div class="fw-step">
+        <div class="num">STEP 1</div>
+        <span>Positioning</span>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-step">
+        <div class="num">STEP 2</div>
+        <span>Targeting</span>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-step">
+        <div class="num">STEP 3</div>
+        <span>Conversion Conversation</span>
+      </div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-center">Retained<br>Client<br>💰</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 17: STEP 1 POSITIONING -->
+  <div class="slide" data-notes="'Investments get retained. Expenses get cut.' Let that land.">
+    <div class="section-label">SECRET #1 — STEP 1</div>
+    <div class="eyebrow">The Flywheel — Step 1</div>
+    <h2>Position yourself as a<br><span class="accent">growth partner</span>,<br>not a videographer.</h2>
+    <div class="two-col" style="margin-top:24px; max-width:720px;">
+      <div class="col-card bad">
+        <h4>Videographer</h4>
+        <p style="font-size:15px; color:#aaa; max-width:none;">Gets booked. One project. Replaced when budget tightens.</p>
+      </div>
+      <div class="col-card good">
+        <h4>Growth Partner</h4>
+        <p style="font-size:15px; color:#aaa; max-width:none;">Gets retained. Seen as an investment, not an expense.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 18: STEP 2 TARGETING -->
+  <div class="slide" data-notes="'When you know who to target, the conversations get easier, the closes get faster, and the fit is better from day one.'">
+    <div class="section-label">SECRET #1 — STEP 2</div>
+    <div class="eyebrow">The Flywheel — Step 2</div>
+    <h2>Not every client is a <span class="accent">retainer client</span>.<br>Here's who is:</h2>
+    <ul class="bullets" style="margin-top:24px;">
+      <li>Already <strong>spending money</strong> on content</li>
+      <li>Already <strong>posting consistently</strong></li>
+      <li>Already <strong>frustrated</strong> with the freelancer revolving door</li>
+      <li>They want to lock someone in — they just <strong>haven't found you</strong> yet</li>
+    </ul>
+  </div>
+
+  <!-- SLIDE 19: STEP 3 CONVERSION -->
+  <div class="slide" data-notes="'This is where most videographers fumble. They get interest, then pitch a one-off because that's all they know how to sell. The Flywheel gives you a framework that closes monthly retainers naturally.'">
+    <div class="section-label">SECRET #1 — STEP 3</div>
+    <div class="eyebrow">The Flywheel — Step 3</div>
+    <h2>The <span class="accent">Conversion Conversation</span><br>that closes monthly retainers — naturally.</h2>
+    <p style="margin-top:20px; max-width:680px;">Takes a prospect from <em>"I need a video"</em> to <em>"let's do this monthly"</em> — without pressure, without pushback. The framework closes for you.</p>
+  </div>
+
+  <!-- SLIDE 20: SECRET 2 TITLE -->
+  <div class="slide section-divider" data-notes="'I know some of you are thinking — this sounds great Temi, but I'm not you. You had celebrity clients. I don't have that. Let me address that right now.'">
+    <div class="s-badge">Secret #2</div>
+    <h1>You Already Have<br><span class="accent">Everything You Need</span><br>to Start Right Now</h1>
+  </div>
+
+  <!-- SLIDE 21: FALSE BELIEF 2 -->
+  <div class="slide" data-notes="'They stay stuck — preparing to prepare, investing in gear that doesn't solve the actual problem.'">
+    <div class="section-label">SECRET #2</div>
+    <div class="belief-card false">
+      <div class="tag">❌ False Belief</div>
+      <div class="text">"I need a bigger portfolio / better gear / more followers before I can charge retainers."</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 22: TRUTH 2 -->
+  <div class="slide" data-notes="'None of that requires a new camera. None of that requires celebrity credits. You can start building retainers with exactly what you have right now.'">
+    <div class="section-label">SECRET #2</div>
+    <div class="belief-card true">
+      <div class="tag">✓ The Truth</div>
+      <div class="text">Retainer clients don't pay for gear or followers.<br>They pay for <span class="accent">reliability, strategy, and results.</span></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 23: TK SETUP -->
+  <div class="slide" data-notes="Slow. Personal. 'Sound familiar?' — let that question sit.">
+    <div class="section-label">SECRET #2 — PROOF</div>
+    <div class="story-card">
+      <div class="name">Meet TK</div>
+      <div class="result">Personal trainer.<br>$1,500/month.<br>No celebrity clients.</div>
+      <div class="backstory">No fancy gear. No real system. Just grinding for whatever gigs he could get. Stuck in the same cycle. Working hard. Getting nowhere.</div>
+    </div>
+    <h3 style="margin-top:24px; color:var(--muted); font-size:clamp(18px,2vw,26px);">Sound familiar?</h3>
+  </div>
+
+  <!-- SLIDE 24: TK TRANSFORMATION -->
+  <div class="slide" data-notes="'Not a new camera. The system. Within 6 months he crossed $12K a month. Consistently. That became his new baseline.'">
+    <div class="section-label">SECRET #2 — PROOF</div>
+    <div style="text-align:center;">
+      <div class="eyebrow">TK — 6 Months Later</div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:32px; margin:24px 0; flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div class="big-stat" style="color:var(--muted);">$1,500</div>
+          <div style="font-size:14px; color:var(--muted); margin-top:4px;">per month</div>
+        </div>
+        <div style="font-size:48px; color:var(--gold);">→</div>
+        <div style="text-align:center;">
+          <div class="big-stat">$12,000+</div>
+          <div style="font-size:14px; color:var(--muted); margin-top:4px;">per month · consistently</div>
+        </div>
+      </div>
+      <p style="font-size:clamp(16px,1.8vw,22px); color:#aaa; font-style:italic;">Same skills he already had. Completely different structure.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 25: E-MAN -->
+  <div class="slide" data-notes="'No experience. No gear. He had the system.'">
+    <div class="section-label">SECRET #2 — PROOF</div>
+    <div class="story-card">
+      <div class="name">E-Man</div>
+      <div class="result">Broke college student<br>→ $10K+/month<br><span style="font-size:0.7em; color:var(--muted);">while still in school</span></div>
+      <div class="backstory">Zero clients. Zero income. Implemented the Retainer Flywheel. Within a year — $10K plus months, still in college.</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 26: KEVIN -->
+  <div class="slide" data-notes="'TK was a personal trainer. E-Man was a broke student. Kevin was in the military. They had the same skills you have RIGHT NOW. The difference was the system.'">
+    <div class="section-label">SECRET #2 — PROOF</div>
+    <div class="story-card">
+      <div class="name">Kevin</div>
+      <div class="result">Active duty military<br>→ Five figures/month<br><span style="font-size:0.7em; color:var(--muted);">on the side</span></div>
+      <div class="backstory">Limited time. High demands. Built a retainer business alongside active duty service. Now clearing five figures a month.</div>
+    </div>
+    <p style="margin-top:20px; font-size:clamp(16px,1.8vw,22px); font-weight:700;">These aren't outliers. They had the same skills <span class="accent">you have right now.</span></p>
+  </div>
+
+  <!-- SLIDE 27: GEAR MYTH -->
+  <div class="slide" data-notes="'Buying more gear without a system is like buying a faster car when you don't know how to drive.' Direct but true.">
+    <div class="section-label">SECRET #2</div>
+    <div style="max-width:720px; text-align:center;">
+      <div style="font-size:clamp(18px,2vw,26px); color:var(--muted); margin-bottom:16px;">
+        <span class="strike">New camera</span> &nbsp;·&nbsp; <span class="strike">New lens</span> &nbsp;·&nbsp; <span class="strike">New software</span>
+      </div>
+      <h2>Buying more gear without a system<br>is like buying a faster car<br>when you <span class="accent">don't know how to drive.</span></h2>
+      <p style="margin-top:20px;">You need a system that turns the skill and gear you already have into consistent income.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 28: CHAT CHECK-IN -->
+  <div class="slide" data-notes="Read 3–4 responses. Validate each one and name the module that solves it. 'Every single one of those is solved by the Flywheel.'">
+    <div class="section-label">SECRET #2</div>
+    <div class="chat-prompt">
+      <div class="chat-icon">💬</div>
+      <p>What's been your biggest obstacle to landing retainer clients?</p>
+      <p class="hint">Drop it in the chat. Don't know how to pitch them? Can't find the right clients? Got ghosted?</p>
+    </div>
+    <p style="margin-top:24px; font-size:clamp(16px,1.8vw,22px); font-weight:700; color:var(--gold);">Every single one of those is solved by the Flywheel.</p>
+  </div>
+
+  <!-- SLIDE 29: SECRET 3 TITLE -->
+  <div class="slide section-divider" data-notes="'I know some of you might be thinking — isn't the market saturated? Let me show you why right now is actually the best possible time.'">
+    <div class="s-badge">Secret #3</div>
+    <h1>The Market Has Never Been<br><span class="accent">More Ready</span><br>for Retainer Videographers</h1>
+  </div>
+
+  <!-- SLIDE 30: FALSE BELIEF 3 -->
+  <div class="slide" data-notes="'I used to think this too. And then I looked at what brands were actually experiencing.'">
+    <div class="section-label">SECRET #3</div>
+    <div class="belief-card false">
+      <div class="tag">❌ False Belief</div>
+      <div class="text">"The market is too saturated. Brands have too many options."</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 31: CONTENT DEMAND TRUTH -->
+  <div class="slide" data-notes="'That is a chaos they desperately want to solve. They want ONE person. ONE partner. ONE point of contact. That's the opportunity.'">
+    <div class="section-label">SECRET #3</div>
+    <div class="belief-card true" style="margin-bottom:0;">
+      <div class="tag">✓ The Truth</div>
+      <div class="text">Content demand has never been higher — and brands are <span class="accent">desperate for a partner.</span></div>
+    </div>
+    <div class="stats-row" style="margin-top:20px;">
+      <div class="stat-pill">
+        <div class="num">300%</div>
+        <div class="label">increase in short-form<br>video demand since 2020</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num">30+</div>
+        <div class="label">content pieces the average<br>brand needs per month</div>
+      </div>
+      <div class="stat-pill">
+        <div class="num">3–5</div>
+        <div class="label">freelancers most brands<br>are using to cover it</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 32: REVOLVING DOOR (BRAND POV) -->
+  <div class="slide" data-notes="'They're not looking for a cheaper freelancer. They're looking for a way OUT of the revolving door. You are the solution.'">
+    <div class="section-label">SECRET #3</div>
+    <div class="eyebrow">From the Brand's Perspective</div>
+    <div class="three-col">
+      <div class="box">
+        <span class="icon">🔁</span>
+        <h4>Every month we brief someone new</h4>
+        <p>Re-explaining the brand from scratch. Every. Single. Time.</p>
+      </div>
+      <div class="box">
+        <span class="icon">📊</span>
+        <h4>Every month the quality is inconsistent</h4>
+        <p>Rotating vendors means a quality lottery.</p>
+      </div>
+      <div class="box">
+        <span class="icon">⏱️</span>
+        <h4>Every month we lose time</h4>
+        <p>The admin overhead is killing their momentum.</p>
+      </div>
+    </div>
+    <p style="margin-top:28px; font-size:clamp(16px,1.8vw,22px); font-weight:700;">You are the solution. You just have to show up <span class="accent">positioned correctly.</span></p>
+  </div>
+
+  <!-- SLIDE 33: THE WINDOW -->
+  <div class="slide" data-notes="'The window is open. The question is whether you walk through it.'">
+    <div class="section-label">SECRET #3</div>
+    <div class="guarantee-box" style="text-align:center;">
+      <div class="badge">The Opportunity Window</div>
+      <h3 style="font-size:clamp(20px,2.5vw,36px); color:var(--text);">The brands who lock in a retainer video partner <span class="accent">right now</span> will have a 2-year content advantage over their competitors.</h3>
+      <p style="margin-top:16px;">And the videographers who position themselves as that partner now will be fully booked at retainer rates — while everyone else competes on price.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 34: TWO PATHS -->
+  <div class="slide" data-notes="'The difference between those two timelines is one decision. This one.'">
+    <div class="section-label">SECRET #3</div>
+    <div class="eyebrow">12 Months From Now</div>
+    <div class="two-paths">
+      <div class="path-card bad">
+        <h4>Path A — Do Nothing</h4>
+        <ul>
+          <li>Wake up at zero every month</li>
+          <li>Chasing every project</li>
+          <li>Grinding harder, same result</li>
+          <li>No predictability</li>
+          <li>Nothing compounds</li>
+        </ul>
+      </div>
+      <div class="path-card good">
+        <h4>Path B — Install the System</h4>
+        <ul>
+          <li>5–10 clients paying monthly</li>
+          <li>Know what's coming in 90 days</li>
+          <li>Income compounds over time</li>
+          <li>Freedom to be selective</li>
+          <li>Business that works for you</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 35: THREE SECRETS RECAP -->
+  <div class="slide" data-notes="Tie the bow. 'Here's where this leads.'">
+    <div class="section-label">CONTENT RECAP</div>
+    <div class="eyebrow">The Three Secrets</div>
+    <div class="three-col">
+      <div class="box">
+        <span class="icon">🔑</span>
+        <h4>Secret #1</h4>
+        <p>The retainer model is the only model that compounds. Project work resets. Retainers stack.</p>
+      </div>
+      <div class="box">
+        <span class="icon">💪</span>
+        <h4>Secret #2</h4>
+        <p>You already have everything you need. TK, E-Man, and Kevin proved it.</p>
+      </div>
+      <div class="box">
+        <span class="icon">⏰</span>
+        <h4>Secret #3</h4>
+        <p>The market is wide open. Brands are desperate for a partner. They just haven't found you.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 36: SETUP FOR OFFER -->
+  <div class="slide" data-notes="Bridge into the pitch. Slow, natural.">
+    <div class="section-label">THE BRIDGE</div>
+    <h2>So how do you actually <span class="accent">implement</span> all three of these?</h2>
+    <p style="margin-top:20px; font-size:clamp(16px,1.8vw,24px);">That's exactly what the <strong style="color:var(--gold);">Retainer Flywheel Coaching Program</strong> is built to do.</p>
+  </div>
+
+  <!-- SLIDE 37: PERMISSION CLOSE -->
+  <div class="slide" data-notes="Watch for YES's in chat. 'I see you [name]. Let's go.' Invite — don't pitch.">
+    <div class="section-label">THE TRANSITION</div>
+    <div class="chat-prompt" style="text-align:center;">
+      <div class="chat-icon">✋</div>
+      <p>Drop "YES" in the chat if what I've shared so far makes sense — if you can see how this would change your business.</p>
+    </div>
+    <h2 style="margin-top:28px;">Would it be okay if I spent the next 15 minutes showing you <span class="accent">exactly how to put this into place?</span></h2>
+  </div>
+
+  <!-- SLIDE 38: TRIAL CLOSE 1 -->
+  <div class="slide" data-notes="Paint the picture. Make it visceral. 'That's what retainers do. That's what we're building.'">
+    <div class="section-label">THE TRANSITION</div>
+    <h2>Imagine waking up on the 1st of next month <span class="accent">knowing exactly what's coming in.</span></h2>
+    <p style="margin-top:20px; max-width:680px;">No anxiety. No hunting. No scrolling for opportunities. Just locked-in income that shows up automatically.</p>
+  </div>
+
+  <!-- SLIDE 39: TRIAL CLOSE 2 -->
+  <div class="slide" data-notes="'That's the only difference.' Direct eye contact.">
+    <div class="section-label">THE TRANSITION</div>
+    <h2>The videographers who will be at $10K, $20K, $30K/month by end of year are <span class="accent">starting this process right now.</span></h2>
+    <p style="margin-top:20px;">Not when they have better gear. Not when the timing is perfect. Now.</p>
+  </div>
+
+  <!-- SLIDE 40: INTRODUCING THE PROGRAM -->
+  <div class="slide" data-notes="Energy up slightly. This is the moment.">
+    <div class="section-label">THE OFFER</div>
+    <div class="eyebrow">Introducing</div>
+    <h1>The Retainer Flywheel<br><span class="accent">Coaching Program</span></h1>
+    <p style="margin-top:16px;">The complete system for going from unpredictable project income to consistent, recurring monthly retainers.</p>
+  </div>
+
+  <!-- SLIDE 41: MODULE 1 -->
+  <div class="slide" data-notes="'If all you got was this module and implemented it tomorrow, you'd start getting different responses immediately.' Value: $497.">
+    <div class="section-label">THE STACK</div>
+    <div class="module-card">
+      <div class="module-badge">1</div>
+      <div class="module-content">
+        <h4>The Growth Partner Positioning System</h4>
+        <p>Completely rebuild how you present yourself. Word-for-word language, brand narrative framework, and outreach positioning so clients immediately see you as an investment — not an expense.</p>
+        <div class="module-value">Value: $497</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 42: MODULE 2 -->
+  <div class="slide" data-notes="'This alone saves you dozens of hours every month chasing the wrong people.' Value: $497.">
+    <div class="section-label">THE STACK</div>
+    <div class="module-card">
+      <div class="module-badge">2</div>
+      <div class="module-content">
+        <h4>The Retainer-Ready Client Targeting System</h4>
+        <p>The exact client profile — what they look like, where to find them, how to qualify them in 5 minutes. Stop wasting time on clients who will never retain.</p>
+        <div class="module-value">Value: $497</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 43: MODULE 3 -->
+  <div class="slide" data-notes="'The crown jewel.' Slow down on this one.">
+    <div class="section-label">THE STACK</div>
+    <div class="module-card">
+      <div class="module-badge">3</div>
+      <div class="module-content">
+        <h4>The Conversion Conversation Framework</h4>
+        <p>Word-for-word conversation structure that takes a prospect from "I need a video" to "let's do this monthly." Every objection handled. Every stage mapped. Closes naturally — no pressure.</p>
+        <div class="module-value">Value: $497</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 44: MODULE 4 -->
+  <div class="slide" data-notes="'Most videographers who try retainers underprice themselves and burn out within 90 days.' Value: $297.">
+    <div class="section-label">THE STACK</div>
+    <div class="module-card">
+      <div class="module-badge">4</div>
+      <div class="module-content">
+        <h4>Retainer Pricing & Packaging Masterclass</h4>
+        <p>How to structure retainer tiers, what to include and what to leave out, and how to price for profit from day one. Never underprice yourself again.</p>
+        <div class="module-value">Value: $297</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 45: MODULE 5 -->
+  <div class="slide" data-notes="'Getting a retainer client is one thing. Keeping them — and growing with them — is the compounding part.' Value: $297.">
+    <div class="section-label">THE STACK</div>
+    <div class="module-card">
+      <div class="module-badge">5</div>
+      <div class="module-content">
+        <h4>The Client Retention Playbook</h4>
+        <p>Monthly check-in system, how to communicate your value so clients never question the investment, and exactly how and when to raise your rates.</p>
+        <div class="module-value">Value: $297</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 46: RUNNING TOTAL + BONUSES TEASE -->
+  <div class="slide" data-notes="'$2,085 in value just from the modules. But I'm not done. Three bonuses — only for people who join today.'">
+    <div class="section-label">THE STACK</div>
+    <div style="text-align:center;">
+      <div class="eyebrow">5 Core Modules</div>
+      <div class="big-stat">$2,085</div>
+      <p style="margin-top:8px; color:var(--muted);">in value — just from the core program</p>
+      <div style="margin-top:28px; background:var(--bg3); border:1px solid var(--gold); border-radius:12px; padding:20px 32px; display:inline-block;">
+        <div style="font-size:13px; font-weight:700; letter-spacing:2px; color:var(--gold); margin-bottom:4px;">PLUS</div>
+        <div style="font-size:clamp(18px,2vw,24px); font-weight:700;">3 Bonuses — Today Only</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 47: BONUS 1 -->
+  <div class="slide" data-notes="FIRST CTA DROP. After presenting this bonus: 'If you're ready to join, click the button below right now.'">
+    <div class="section-label">THE STACK — BONUS</div>
+    <div class="module-card">
+      <div class="module-badge bonus-badge">B1</div>
+      <div class="module-content">
+        <h4>Retainer Contract Template Pack</h4>
+        <p>Done-for-you legal templates, scope of work frameworks, and revision policy language. Plug in immediately. No lawyer required.</p>
+        <div class="module-value">Value: $197</div>
+      </div>
+    </div>
+    <div class="cta-btn" style="margin-top:24px;">Click the button below to join now →</div>
+  </div>
+
+  <!-- SLIDE 48: BONUS 2 -->
+  <div class="slide" data-notes="SECOND CTA DROP. 'Click the button below to join now.'">
+    <div class="section-label">THE STACK — BONUS</div>
+    <div class="module-card">
+      <div class="module-badge bonus-badge">B2</div>
+      <div class="module-content">
+        <h4>Cold Outreach & Referral Script Library</h4>
+        <p>Every DM, email, and referral ask you need to fill your pipeline with retainer-ready prospects. Tested and refined with dozens of students. You're not writing a word from scratch.</p>
+        <div class="module-value">Value: $197</div>
+      </div>
+    </div>
+    <div class="cta-btn" style="margin-top:24px;">Click the button below to join now →</div>
+  </div>
+
+  <!-- SLIDE 49: BONUS 3 -->
+  <div class="slide" data-notes="THIRD CTA DROP. 'Click the button below to get started.'">
+    <div class="section-label">THE STACK — BONUS</div>
+    <div class="module-card">
+      <div class="module-badge bonus-badge">B3</div>
+      <div class="module-content">
+        <h4>The 90-Day Retainer Launch Plan</h4>
+        <p>Week-by-week, what to do, in what order, for the next 90 days. Your only job is to follow the plan.</p>
+        <div class="module-value">Value: $297</div>
+      </div>
+    </div>
+    <div class="cta-btn" style="margin-top:24px;">Click the button below to get started →</div>
+  </div>
+
+  <!-- SLIDE 50: FULL STACK REVEAL -->
+  <div class="slide" data-notes="'You're not paying $2,776. You're not paying $2,500. Today — $1,997. One payment. And it comes with my guarantee.'">
+    <div class="section-label">THE STACK — FULL REVEAL</div>
+    <table class="stack-table">
+      <tr><td>Module 1 – Growth Partner Positioning</td><td>$497</td></tr>
+      <tr><td>Module 2 – Retainer-Ready Client Targeting</td><td>$497</td></tr>
+      <tr><td>Module 3 – Conversion Conversation Framework</td><td>$497</td></tr>
+      <tr><td>Module 4 – Pricing & Packaging</td><td>$297</td></tr>
+      <tr><td>Module 5 – Client Retention Playbook</td><td>$297</td></tr>
+      <tr><td>Bonus 1 – Contract Templates</td><td>$197</td></tr>
+      <tr><td>Bonus 2 – Outreach Script Library</td><td>$197</td></tr>
+      <tr><td>Bonus 3 – 90-Day Launch Plan</td><td>$297</td></tr>
+      <tr class="total-row"><td>Total Value</td><td>$2,776</td></tr>
+      <tr class="price-row"><td>Today Only</td><td class="accent">$1,997</td></tr>
+    </table>
+  </div>
+
+  <!-- SLIDE 51: THE GUARANTEE -->
+  <div class="slide" data-notes="Slow. Reassuring. 'The only way you lose is if you don't try.'">
+    <div class="section-label">THE CLOSE</div>
+    <div class="guarantee-box">
+      <div class="badge">🛡️ The 90-Day First Retainer Guarantee</div>
+      <h3>Complete the program, implement the system, and if you haven't landed your first retainer client within 90 days...</h3>
+      <p style="margin-top:12px;">I will personally work with you one-on-one until you do. And if you still haven't? <strong style="color:var(--gold);">Full refund. No questions.</strong></p>
+      <p style="margin-top:12px; color:var(--muted);">No risk. No fine print. The only way you lose is if you don't try.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 52: URGENCY & SCARCITY -->
+  <div class="slide" data-notes="'This isn't fake urgency. I don't do fake deadlines. Limited spots because I'm personally involved.' Drop link in chat.">
+    <div class="section-label">THE CLOSE</div>
+    <div class="eyebrow">This Offer Expires When the Webinar Ends</div>
+    <div class="urgency-list">
+      <div class="urgency-item">
+        <div class="dot"></div>
+        <span>$1,997 pricing is for <strong>live webinar attendees only</strong></span>
+      </div>
+      <div class="urgency-item">
+        <div class="dot"></div>
+        <span>All <strong>3 bonuses expire at midnight tonight</strong></span>
+      </div>
+      <div class="urgency-item">
+        <div class="dot"></div>
+        <span>Coaching cohort has <strong>limited spots</strong> — I'm personally involved</span>
+      </div>
+    </div>
+    <p style="margin-top:20px; color:var(--muted); font-style:italic;">Not fake urgency. Real limit. Real deadline.</p>
+  </div>
+
+  <!-- SLIDE 53: FINAL CTA -->
+  <div class="slide final-cta-slide" data-notes="FINAL CLOSE. Slow. Eye contact. Drop link in chat. Pin it. Pause 10 seconds after 'I'll see you inside.'">
+    <div class="section-label">THE CLOSE</div>
+    <h2>The Retainer Flywheel<br><span class="accent">Coaching Program</span></h2>
+    <p style="margin-top:12px; font-size:clamp(16px,1.8vw,22px);">Everything included · <strong style="color:var(--gold);">$1,997</strong></p>
+    <div class="cta-btn" style="margin-top:28px; font-size:clamp(18px,2vw,26px); padding:24px 56px;">CLICK HERE TO JOIN NOW →</div>
+    <p style="margin-top:20px; font-size:13px; color:var(--muted);">TK did it. E-Man did it. Kevin did it. And I guarantee it.</p>
+  </div>
+
+  <!-- SLIDE 54: Q&A -->
+  <div class="slide" data-notes="Keep dropping the link in chat throughout Q&A. Tie every answer back to the offer. See qa-seed-questions.md for planted questions and model answers.">
+    <div class="section-label">Q&A</div>
+    <div class="chat-prompt" style="text-align:center;">
+      <div class="chat-icon">🙋</div>
+      <p>Questions? I'm here.<br>Drop them in the chat.</p>
+      <p class="hint" style="margin-top:16px;">And while we do Q&A — the link to join is pinned in the chat.</p>
+    </div>
+    <p style="margin-top:24px; font-size:14px; color:var(--muted);">10 minutes · If you're ready to go, don't wait — click the link now.</p>
+  </div>
+
+</div><!-- end #deck -->
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"></div>
+
+<!-- CONTROLS -->
+<div id="controls">
+  <div id="slide-counter">0 / 54</div>
+  <div class="ctrl-btn" onclick="prevSlide()" title="Previous (←)">‹</div>
+  <div class="ctrl-btn" onclick="nextSlide()" title="Next (→ or Space)">›</div>
+  <div class="ctrl-btn" onclick="toggleNotes()" title="Speaker notes (N)">📝</div>
+</div>
+
+<!-- KEYBOARD HINT -->
+<div id="kb-hint">← → navigate &nbsp;·&nbsp; N notes &nbsp;·&nbsp; F fullscreen</div>
+
+<!-- NOTES PANEL -->
+<div id="notes-panel">
+  <h5>Speaker Notes</h5>
+  <div id="notes-content"></div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+  let notesVisible = false;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, slides.length - 1));
+    slides[current].classList.add('active');
+
+    // Progress bar
+    const pct = (current / (slides.length - 1)) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+
+    // Counter
+    document.getElementById('slide-counter').textContent = current + ' / ' + (slides.length - 1);
+
+    // Notes
+    const notes = slides[current].dataset.notes || '';
+    document.getElementById('notes-content').textContent = notes || '—';
+  }
+
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+
+  function toggleNotes() {
+    notesVisible = !notesVisible;
+    const panel = document.getElementById('notes-panel');
+    panel.classList.toggle('visible', notesVisible);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault(); nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); prevSlide();
+    } else if (e.key === 'n' || e.key === 'N') {
+      toggleNotes();
+    } else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    } else if (e.key === 'Home') {
+      showSlide(0);
+    } else if (e.key === 'End') {
+      showSlide(slides.length - 1);
+    }
+  });
+
+  // Click to advance (right half) / go back (left half)
+  document.getElementById('deck').addEventListener('click', e => {
+    const midX = window.innerWidth / 2;
+    if (e.clientX > midX) nextSlide();
+    else prevSlide();
+  });
+
+  // Init
+  showSlide(0);
+</script>
+</body>
+</html>

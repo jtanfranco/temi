@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presenter Script — The Retainer Flywheel | Camera to Cash</title>
+<style>
+  :root {
+    --gold: #C8860A;
+    --ink: #1a1a1a;
+    --muted: #666;
+    --light: #f5f5f0;
+    --border: #e0ddd5;
+    --stage: #7a5c00;
+    --stage-bg: #fdf8ee;
+    --note-bg: #f0f7ff;
+    --note-border: #4a90c4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: #fafaf8;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  /* ── PRINT BUTTON ── */
+  #print-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 32px;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+  }
+
+  #print-bar strong { color: #F5A623; font-size: 14px; }
+
+  #print-btn {
+    background: #F5A623;
+    color: #111;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: -apple-system, sans-serif;
+  }
+
+  #print-btn:hover { background: #e09010; }
+
+  /* ── LAYOUT ── */
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 32px;
+    margin-bottom: 40px;
+  }
+
+  .cover .brand {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .cover h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .cover .meta {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .cover .meta span::before { content: '· '; color: var(--gold); }
+  .cover .meta span:first-child::before { content: ''; }
+
+  .how-to-use {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    margin-top: 24px;
+  }
+
+  .how-to-use strong { color: var(--note-border); }
+
+  /* ── SECTION HEADERS ── */
+  .section-head {
+    background: var(--ink);
+    color: white;
+    padding: 14px 24px;
+    margin: 48px -40px 32px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .section-head h2 {
+    font-family: -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .section-head .timing {
+    font-family: -apple-system, sans-serif;
+    font-size: 12px;
+    color: #F5A623;
+    font-weight: 600;
+  }
+
+  /* ── SUBSECTION ── */
+  .subsection {
+    margin: 36px 0 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .subsection h3 {
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .subsection .slide-ref {
+    font-family: -apple-system, sans-serif;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+
+  /* ── SCRIPT LINES ── */
+  .script {
+    margin: 12px 0;
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--ink);
+  }
+
+  /* ── STAGE DIRECTIONS ── */
+  .stage {
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: var(--stage);
+    background: var(--stage-bg);
+    border-left: 3px solid var(--gold);
+    padding: 8px 14px;
+    margin: 10px 0;
+    border-radius: 0 6px 6px 0;
+    font-style: normal;
+    line-height: 1.5;
+  }
+
+  /* ── NOTES ── */
+  .note {
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: 12.5px;
+    color: #444;
+    background: var(--note-bg);
+    border-left: 3px solid var(--note-border);
+    padding: 8px 14px;
+    margin: 10px 0;
+    border-radius: 0 6px 6px 0;
+    line-height: 1.5;
+  }
+
+  .note strong { color: var(--note-border); }
+
+  /* ── EMERGENCY PIVOT ── */
+  .pivot {
+    background: #fff5f5;
+    border-left: 3px solid #e57373;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-family: -apple-system, sans-serif;
+    font-size: 13px;
+    color: #7a1a1a;
+    line-height: 1.5;
+  }
+
+  .pivot strong { color: #c0392b; }
+
+  /* ── INLINE EMPHASIS ── */
+  .beat {
+    display: block;
+    height: 12px;
+  }
+
+  em { font-style: italic; }
+  strong { font-weight: 700; }
+
+  /* ── DIVIDER ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 28px 0;
+  }
+
+  /* ── PAGE BREAK ── */
+  .page-break { page-break-before: always; }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    #print-bar { display: none; }
+    body { background: white; font-size: 13px; }
+    .page { padding: 20px 24px 40px; max-width: 100%; }
+    .section-head { margin: 32px 0 20px; }
+    .stage, .note { font-size: 11px; }
+    .script { font-size: 13px; line-height: 1.7; }
+    .cover h1 { font-size: 28px; }
+    .subsection { margin: 24px 0 12px; }
+  }
+
+  @page {
+    margin: 20mm 18mm;
+    size: letter;
+  }
+</style>
+</head>
+<body>
+
+<div id="print-bar">
+  <span><strong>The Retainer Flywheel</strong> — Presenter Script · Camera to Cash</span>
+  <button id="print-btn" onclick="window.print()">Export as PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="brand">Camera to Cash</div>
+    <h1>The Retainer Flywheel<br>Presenter Script</h1>
+    <div class="meta">
+      <span>Host: Temi</span>
+      <span>Duration: 90 Minutes</span>
+      <span>Format: Live Webinar</span>
+      <span>Offer: $1,997</span>
+    </div>
+    <div class="how-to-use">
+      <strong>How to use this script:</strong> Stage directions are in <span style="color:var(--stage); font-weight:600;">gold boxes</span>. Notes and reminders are in <span style="color:var(--note-border); font-weight:600;">blue boxes</span>. Ad-lib naturally where you feel it — this is a guide, not a cage. Read it aloud at least twice before going live.
+    </div>
+  </div>
+
+
+  <!-- ═══ PRE-SHOW ═══ -->
+  <div class="section-head">
+    <h2>Pre-Show</h2>
+    <span class="timing">Start 5 min early</span>
+  </div>
+
+  
+  <p class="script">"Hey hey — welcome in, welcome in. We're gonna get started in just a couple minutes so if you've got people you know who should be on this, tag them, share the link. While we're waiting — drop your city in the chat. I wanna see who's showing up today."</p>
+
+  
+  <p class="script">"Atlanta! What's good. Chicago in the building. LA — respect. London — y'all staying up late for this, I see you."</p>
+
+  
+  <p class="script">"Quick question while we wait — be honest in the chat. How much are you currently making per month from video? Drop a letter: A for under $2K, B for $2K to $5K, C for $5K to $10K, or D for $10K plus. Go ahead."</p>
+
+  
+  <p class="script">"Okay I'm seeing a lot of B's and some A's. Perfect. You're exactly who this is for. Let's get into it."</p>
+
+
+  <!-- ═══ SECTION I: THE HOOK ═══ -->
+  <div class="section-head">
+    <h2>Section I — The Hook</h2>
+    <span class="timing">0:00 – 5:00</span>
+  </div>
+
+  <div class="subsection">
+    <h3>Opening — Pattern Interrupt</h3>
+    <span class="slide-ref">Slide 1</span>
+  </div>
+
+  
+  <p class="script">"What if every client you landed… stayed."</p>
+
+  <span class="note"><strong>NOTE:</strong> Pause. 3 full seconds. Let it sit in silence. This is the hook. Don't rush it.</span>
+
+  <p class="script">"Not for one project. Not for a season. Every month. Automatically. No re-pitching. No cold DMs. No starting from zero. What would your business look like? What would your <em>life</em> look like?"</p>
+
+  <p class="script">"That's exactly what we're building today."</p>
+
+  <div class="subsection">
+    <h3>The Promise</h3>
+    <span class="slide-ref">Slide 2</span>
+  </div>
+
+  
+  <p class="script">"Here's what I'm going to show you today. By the end of this webinar, you're going to have the exact 3-step system I used to go from $200 in my bank account — after shooting for one of the biggest names in entertainment — to doing $30K to $50K a month in recurring income. We're talking a specific, tested, proven system. Not theory. Not motivation. A system."</p>
+
+  <div class="subsection">
+    <h3>Who This Is For</h3>
+    <span class="slide-ref">Slide 3</span>
+  </div>
+
+  
+  <p class="script">"But real quick — is this for you? If you're a videographer currently making somewhere between 2K and 5K a month... if you're working hard but you feel like you wake up every single month at zero... and if you're ready to build something that actually compounds instead of resets — this is for you."</p>
+
+  <p class="script">"If that's not where you are, no worries — this might not be your thing. But if that IS you, stay locked in for the next 90 minutes. Because what I'm about to show you is going to change how you look at your business forever."</p>
+
+  <div class="subsection">
+    <h3>Credibility Stack</h3>
+    <span class="slide-ref">Slide 4</span>
+  </div>
+
+  
+  <p class="script">"Quick background on me — I'm Temi. Three years ago, my portfolio looked like a highlight reel. I'd shot for Future, Lil Baby, Steve Harvey, Cam Newton, DeVito, Real Housewives, Morehouse College. From the outside, I was absolutely crushing it."</p>
+
+  
+  <p class="script">"But I was still broke."</p>
+
+  
+  <p class="script">"I remember sitting in my car after a shoot. Everyone's hyped. The content looks incredible. The client is posting it everywhere. And I checked my account."</p>
+
+  
+  <p class="script">"$200."</p>
+
+  <p class="script">"That was my breaking point. Not because I wasn't talented. But because I realized something — I wasn't bad at videography. I was bad at business. I was the Uber driver of videography. Clients would book me when they needed a ride, use me for that one trip, and forget my name by the next project."</p>
+
+  <p class="script">"Today I run 10 retainer clients averaging 5 to 7K a month each. That's $50K plus in recurring revenue — every single month. Same skills. Same gear. Completely different structure. And I'm going to show you exactly how I got there."</p>
+
+  <div class="subsection">
+    <h3>Engagement Hook</h3>
+    <span class="slide-ref">Slide 5</span>
+  </div>
+
+  
+  <p class="script">"Real quick — drop a number in the chat for me. How many clients have you worked with in the last 12 months? 10? 20? 30? Maybe 50? Go ahead, just drop the number."</p>
+
+  
+  <p class="script">"Okay I'm seeing 15... 22... somebody said 40, respect, that's a lot of hustle."</p>
+
+  
+  <p class="script">"Now... how many of those clients are still paying you today?"</p>
+
+  
+  <p class="script">"Probably zero."</p>
+
+  <p class="script">"That's not a talent problem. That's a structure problem. And we're fixing that today."</p>
+
+  <div class="subsection">
+    <h3>The Roadmap</h3>
+    <span class="slide-ref">Slide 6</span>
+  </div>
+
+  
+  <p class="script">"Here's what we're covering. First — I'm going to show you exactly WHY the way most videographers operate keeps them broke, no matter how talented they are. Second — I'm going to walk you through the Retainer Flywheel: the 3-step system for building predictable monthly income. And third — I'm going to show you the path to actually implementing this in your business."</p>
+
+  <p class="script">"We've got a lot to cover and 90 minutes to do it. Let's go."</p>
+
+
+  <!-- ═══ SECTION II: THE CONTENT ═══ -->
+  <div class="section-head">
+    <h2>Section II — The Content</h2>
+    <span class="timing">5:00 – 45:00</span>
+  </div>
+
+  <div class="subsection">
+    <h3>The Big Domino</h3>
+    <span class="slide-ref">Slides 7–10</span>
+  </div>
+
+  
+  <p class="script">"I want you to write this down. Grab a pen, open a note — whatever you've got. Because this is the most important thing I'm going to say today."</p>
+
+  
+  <p class="script">"You don't have a skill problem. You have a structure problem."</p>
+
+  <span class="note"><strong>NOTE:</strong> Pause again after "structure problem." Let it breathe. This belief shift needs to land before everything else. Don't keep talking.</span>
+
+  <p class="script">"The videographers making $30K, $50K, $100K a month are NOT more talented than you. They don't have better cameras. They don't have a bigger following. They have a different structure. And once you install the right structure — the same skills you already have will produce completely different results. That's the big idea. Everything else flows from this."</p>
+
+  
+  <p class="script">"Look at this math. To make $10K a month on a project model — you might need 20 clients. That's 20 discovery calls. 20 proposals. 20 shoots. 20 edits. 20 invoices. And then you start all over next month."</p>
+
+  <p class="script">"OR — 5 retainer clients at $2,000 a month. Same $10K. A quarter of the relationships. And it repeats automatically. This is why the structure matters more than the skill."</p>
+
+  
+  <p class="script">"Here's how I describe it. Most videographers are Uber drivers. Clients book you when they need a ride, use you for that one trip, and forget your name by the next project. If someone cheaper comes along, they'll take them."</p>
+
+  <p class="script">"But the videographers making real money? They're private drivers. Same client, every month. Trusted. Valued. Irreplaceable."</p>
+
+  <p class="script">"The difference isn't talent. It's positioning."</p>
+
+  
+  <p class="script">"Think about what the reset does to you psychologically. Every month you wake up at zero. Every month you're hunting. Every month you're closer to that moment where the work dries up and the bills don't stop."</p>
+
+  <p class="script">"And the harder you work, the more it feels like you're falling behind — because none of it compounds."</p>
+
+  <p class="script">"A year of grinding and you're in the exact same spot. That ends today."</p>
+
+  <hr>
+
+  <div class="subsection">
+    <h3>Secret #1 — The Vehicle</h3>
+    <span class="slide-ref">Slides 11–19 · 12 min</span>
+  </div>
+
+  
+  <p class="script">"Alright. Secret number one. This is about the vehicle — the model itself. And I need to bust the biggest myth in videography before anything else."</p>
+
+  
+  <p class="script">"Here's what most videographers believe. They think the answer to making more money is finding more clients. More DMs. More cold emails. More posting. And I believed that too. For two years I chased clients. Big name after big name. And my bank account never reflected it. The problem wasn't the number of clients. It was that none of them stayed."</p>
+
+  
+  <p class="script">"Here's the reframe. You don't need more clients. You need the same clients — or better clients — to pay you every month. One retained client at $3,000 a month is worth more than 10 one-off projects at $300 each. Less work, more money, more predictability. This is the vehicle shift."</p>
+
+  
+  <p class="script">"After that $200 moment — I made a decision. I was figuring this out, whatever it took."</p>
+
+  <p class="script">"I started studying how agencies build revenue. How consultants charge. How coaches structure their programs. And I kept seeing the same thing over and over — they weren't selling deliverables. They were selling outcomes. They were positioning themselves as partners, not vendors."</p>
+
+  <p class="script">"The client wasn't buying a video. They were buying growth."</p>
+
+  
+  <p class="script">"That was the shift. And once I made it — everything changed."</p>
+
+  
+  <p class="script">"Here's what the brands and businesses spending real money on content actually want. They don't want to brief a new freelancer every month. They don't want inconsistent quality. They want someone who knows their brand, knows their audience, shows up reliably."</p>
+
+  <p class="script">"They want a partner. They just haven't found the right person positioned that way."</p>
+
+  
+  <p class="script">"That person can be you."</p>
+
+  
+  <p class="script">"This is the Retainer Flywheel. Three steps that work together. When all three are aligned, clients come to you, they pay you monthly, and they stay. Let me walk through each step."</p>
+
+  
+  <p class="script">"Step one — Positioning. Most videographers pitch themselves as a videographer. That's the problem. You sound like everyone else. The flywheel teaches you how to position yourself as a growth partner. Someone who helps a brand grow revenue through content — not just someone who shows up with a camera."</p>
+
+  <p class="script">"When you're positioned right, clients see you as an investment, not an expense. Investments get retained. Expenses get cut."</p>
+
+  
+  <p class="script">"Step two — Targeting. Not every client is a retainer client. There's a specific type. They're already spending money on content. Already posting consistently. Already frustrated with the revolving door of freelancers. They WANT to lock someone in. They just haven't found you yet. Once you know who to target, everything gets easier."</p>
+
+  
+  <p class="script">"Step three — The Conversion Conversation. This is where most videographers fumble. They get interest, then pitch a one-off project — because that's all they know how to sell. The Flywheel gives you a specific conversation framework that takes a prospect from 'I need a video' to 'let's do this monthly.' Naturally. Without being pushy. The framework does the closing for you."</p>
+
+  <hr>
+
+  <div class="subsection">
+    <h3>Secret #2 — Internal Belief</h3>
+    <span class="slide-ref">Slides 20–28 · 12 min</span>
+  </div>
+
+  
+  <p class="script">"Secret number two is about internal belief. Because I know some of you are thinking — 'This sounds great, Temi, but I'm not you. You had celebrity clients. I don't have that.'"</p>
+
+  <p class="script">"I hear you. So let me address that right now."</p>
+
+  
+  <p class="script">"Here's the false belief I see stop videographers more than anything else. They think they need to 'level up' before they can charge retainers. Better camera. More notable clients. Bigger Instagram."</p>
+
+  <p class="script">"And so they stay stuck — preparing to prepare, investing in gear that doesn't solve the actual problem."</p>
+
+  
+  <p class="script">"Here's what retainer clients actually pay for. Reliability. They pay for someone who shows up consistently. Strategy. They pay for someone who understands their goals. Results. Measurable outcomes. None of that requires a new camera. None of that requires celebrity credits. You can start building retainers with exactly what you have right now."</p>
+
+  <div class="subsection">
+    <h3>TK's Story</h3>
+    <span class="slide-ref">Slides 23–24</span>
+  </div>
+
+  
+  <p class="script">"Let me tell you about TK. When TK found me, he was a personal trainer. He wasn't even really doing videography full time. He was making about $1,500 a month from whatever gigs he could get."</p>
+
+  <p class="script">"No celebrity clients. No fancy gear. No real system. Just grinding for whatever was available."</p>
+
+  
+  <p class="script">"Sound familiar?"</p>
+
+  
+  <p class="script">"I taught TK the Retainer Flywheel. Not a new camera. Not a new editing style. The system. Within 6 months he crossed $12K a month. Consistently. Not a lucky month — that became his new baseline. Same skills he already had. Completely different structure."</p>
+
+  
+  <p class="script">"E-Man was a broke college student. Zero clients, zero income when he started. Implemented the Retainer Flywheel. Within a year he was doing $10K plus months — while still in school. No experience. No gear. The system."</p>
+
+  
+  <p class="script">"Kevin was active duty military. Limited time, limited flexibility. Built a retainer business on the side. Now he's clearing five figures a month."</p>
+
+  
+  <p class="script">"These aren't outliers. TK was a personal trainer. E-Man was a broke student. Kevin was in the military. They had the same skills you have right now. The difference was the system."</p>
+
+  
+  <p class="script">"You don't need to buy more gear. You don't need the next expensive camera or lens."</p>
+
+  <p class="script">"That's like buying a faster car when you don't even know how to drive yet."</p>
+
+  <p class="script">"You need a system that turns the skill and gear you already have into consistent income. The gear is not the bottleneck. The structure is."</p>
+
+  
+  <p class="script">"Real quick — drop in the chat. What's been your biggest obstacle to landing retainer clients? Is it you don't know how to pitch them? You don't know where to find them? You've tried and gotten ghosted?"</p>
+
+  
+  <p class="script">"Yeah — [response], the positioning thing is exactly what Module 1 handles. [Response] — that's the targeting piece, Module 2. [Response] — that's the conversion conversation, Module 3."</p>
+
+  <p class="script">"Every single one of those obstacles is solved by the Flywheel. Keep that in mind as we get to secret three."</p>
+
+  <hr>
+
+  <div class="subsection">
+    <h3>Secret #3 — External / Timing</h3>
+    <span class="slide-ref">Slides 29–36 · 11 min</span>
+  </div>
+
+  
+  <p class="script">"Secret number three is about timing. And I know some of you might be thinking — 'Temi, isn't the market saturated? Isn't everyone a videographer now?'"</p>
+
+  <p class="script">"Let me show you why right now is actually the best possible time to do this."</p>
+
+  
+  <p class="script">"Here's the false belief about timing. That there are too many videographers, so brands have too many choices, and you'll just get commoditized. I used to think this too. Until I looked at what brands are actually experiencing."</p>
+
+  
+  <p class="script">"The truth is — content demand has never been higher. Short form, long form, social, brand, product. Brands need MORE video now than ever. And most of them are cobbling it together with 3, 4, 5 different freelancers."</p>
+
+  <p class="script">"That is a chaos they desperately want to solve. They want ONE person. ONE partner. ONE point of contact who handles it all. That's the opportunity sitting right in front of you."</p>
+
+  
+  <p class="script">"Here's what it looks like from the brand's perspective. Every month, they're briefing a new freelancer. Every month, the quality is inconsistent. Every month, they're re-explaining their brand voice, their style, their goals."</p>
+
+  <p class="script">"They're not looking for a cheaper freelancer. They're looking for a way OUT of that revolving door. You are the solution. You just have to show up positioned correctly."</p>
+
+  
+  <p class="script">"Here's the window that's open right now. The brands who lock in the right video partner today will be compounding their content advantage while their competitors are still hunting for freelancers. And the videographers who position themselves as that partner NOW will be fully booked at retainer rates while everyone else is still competing on price."</p>
+
+  <p class="script">"The window is open. The question is whether you walk through it."</p>
+
+  
+  <p class="script">"A year from now, you're in one of two places. Either you're still in the same cycle — waking up at zero, chasing projects, grinding harder for the same result. Or you've got 5 to 10 clients paying you monthly, you know what's coming in 90 days, and it's compounding."</p>
+
+  <p class="script">"The difference between those two timelines is one decision. This one."</p>
+
+  
+  <p class="script">"Let's bring this together. Secret one — the retainer model is the only model that compounds. Project work resets. Retainers stack. Secret two — you already have what it takes. TK, E-Man, and Kevin proved that. Secret three — the market is wide open. Brands are desperate for a reliable partner. They just haven't found you yet."</p>
+
+  
+  <p class="script">"Everything I've shown you today — the positioning, the targeting, the conversion conversation — there's a specific way to implement each piece. And I've packaged this entire system into a program. Let me show you what that looks like."</p>
+
+
+  <!-- ═══ SECTION III: TRANSITION ═══ -->
+  <div class="section-head">
+    <h2>Section III — The Transition</h2>
+    <span class="timing">52:00 – 57:00</span>
+  </div>
+
+  
+  <p class="script">"Before I do — quick show of hands in the chat. Drop 'YES' if what I've shared so far makes sense. If you can see how this would change your business."</p>
+
+  
+  <p class="script">"I see you, I see you. Alright. Would it be okay if I spent the next 15 minutes showing you exactly how to put all of this into place? Because I've packaged this entire system into a program and I want to walk you through what's inside."</p>
+
+  
+  <p class="script">"Imagine this. It's the first of next month. Instead of that familiar anxiety — wondering where the next project is coming from, DM-ing old clients, refreshing your email hoping for a reply — you wake up and you already know what's coming in. Because it's locked in. That's what retainers do. That's what we're building."</p>
+
+  
+  <p class="script">"The videographers who are going to hit $10K, $20K, $30K months by the end of this year — they're not waiting for the perfect moment. They're not waiting until they have better gear. They're installing the system now. That's the only difference."</p>
+
+  
+  <p class="script">"Alright. Introducing — The Retainer Flywheel Coaching Program."</p>
+
+
+  <!-- ═══ SECTION IV: THE STACK ═══ -->
+  <div class="section-head">
+    <h2>Section IV — The Stack</h2>
+    <span class="timing">57:00 – 72:00</span>
+  </div>
+
+  
+  <p class="script">"Let me walk you through exactly what's inside. Module one — the Growth Partner Positioning System. This is where we completely rebuild how you present yourself to clients. I give you the exact language — word for word — for how to describe what you do so that clients immediately see you as an investment, not an expense. We cover your brand narrative, your offer framing, your outreach positioning. If all you got from this program was this one module and implemented it tomorrow, you'd start getting different responses from prospects immediately. Standalone value: $497."</p>
+
+  
+  <p class="script">"Module two — the Retainer-Ready Client Targeting System. This is how you stop wasting time on clients who will never retain and start spending all your energy on the ones who will. I show you the exact client profile — what they look like, where they live, how to find them, how to qualify them in a 5-minute conversation. This alone saves you dozens of hours every month. Value: $497."</p>
+
+  
+  <p class="script">"Module three — the Conversion Conversation Framework. The crown jewel. The word-for-word conversation structure that takes a prospect from 'I need a video' to 'let's do this monthly.' Every stage of the conversation. Every objection you'll face — and exactly how to handle it. The exact close that transitions them into a monthly retainer without any pressure. Value: $497."</p>
+
+  
+  <p class="script">"Module four — Retainer Pricing and Packaging. Most videographers who try retainers underprice themselves and burn out within 90 days. This module shows you how to structure your tiers, what to include and what to leave out, and how to price for profit from day one. Value: $297."</p>
+
+  
+  <p class="script">"Module five — The Client Retention Playbook. Getting a retainer client is one thing. Keeping them and growing with them is the compounding part. Monthly check-in system, value communication, how to raise your rates. Value: $297."</p>
+
+  
+  <p class="script">"Five core modules. $2,085 in value. But I'm not done. Because I want to make this a no-brainer, I'm adding three bonuses — and these are only for people who join today."</p>
+
+  
+  <p class="script">"Bonus one — the Retainer Contract Template Pack. Done-for-you legal templates, scope of work frameworks, revision policy language — plug in and go. No lawyer required. Value: $197."</p>
+
+  <p class="script">"If you're ready to join — the link is in the chat. Click it right now while we keep going."</p>
+
+  
+  <p class="script">"Bonus two — the Cold Outreach and Referral Script Library. Every DM, email, and referral ask you need to fill your pipeline. Tested and refined with dozens of students. You're not writing a single word from scratch. Value: $197."</p>
+
+  <p class="script">"Link is in the chat."</p>
+
+  
+  <p class="script">"Bonus three — the 90-Day Retainer Launch Plan. Week by week, what to do, in what order, for the next 90 days. Your only job is to follow the plan. Value: $297."</p>
+
+  <p class="script">"Link is in the chat."</p>
+
+  
+  <p class="script">"Here's everything. Five core modules. Three bonuses. Total value: $2,776."</p>
+
+  
+  <p class="script">"You're not paying $2,776. You're not paying $2,500. Today — for everyone on this live webinar — the investment is $1,997. One payment. $1,997. To install the same system that TK used to go from $1,500 to $12K a month. That E-Man used to go from zero to $10K plus while in college. That Kevin used to build five figures a month while on active duty."</p>
+
+  <p class="script">"And it comes with my guarantee. Let me tell you about that."</p>
+
+
+  <!-- ═══ SECTION V: THE CLOSE ═══ -->
+  <div class="section-head">
+    <h2>Section V — The Close</h2>
+    <span class="timing">72:00 – 87:00</span>
+  </div>
+
+  
+  <p class="script">"Here's the guarantee — and I call it the 90-Day First Retainer Guarantee."</p>
+
+  <p class="script">"Complete the program, implement the system, and if you haven't landed your first retainer client within 90 days — I will personally work with you one-on-one until you do. And if you still haven't? I'll refund you in full."</p>
+
+  <p class="script">"No risk. No fine print."</p>
+
+  <p class="script">"I'm so confident this works — because it worked for TK, E-Man, Kevin, and dozens of others — that I'm willing to put my own money behind it. The only way you lose is if you don't try."</p>
+
+  
+  <p class="script">"Here's what I need you to know about timing. This price — $1,997 with all three bonuses — is for this live webinar only. When this webinar ends, the price goes up and the bonuses come off the table."</p>
+
+  <p class="script">"This isn't fake urgency. I don't do fake deadlines. The coaching cohort has a limited number of spots because I'm personally involved in this program, and I can only give real attention to a limited number of people at once."</p>
+
+  <p class="script">"If you've been thinking about it — now is the time. The link is in the chat. Click it."</p>
+
+  
+  <p class="script">"Here's your decision."</p>
+
+  
+  <p class="script">"You can close this webinar. Go back to the same cycle. Wake up at zero next month. Start the hunt all over again."</p>
+
+  <p class="script">"Or — you can click the button below, join the Retainer Flywheel program, and start building the business you actually want."</p>
+
+  <p class="script">"The system works. TK proved it. E-Man proved it. Kevin proved it. And I guarantee it."</p>
+
+  <p class="script">"The link is in the chat. Click it now. I'll see you inside."</p>
+
+  <span class="note"><strong>NOTE:</strong> Hold eye contact. Pause 10 full seconds. Let it sit. Don't fill the silence.</span>
+
+
+  <!-- ═══ Q&A ═══ -->
+  <div class="section-head">
+    <h2>Q&A</h2>
+    <span class="timing">87:00 – 97:00</span>
+  </div>
+
+  
+  <p class="script">"Alright — let's get into Q&A. I've got about 10 minutes for questions. Drop them in the chat right now."</p>
+
+  <p class="script">"And while we're doing Q&A — the link is still pinned. If you already know you're in, don't wait — click it now. You can do both."</p>
+
+  <span class="note"><strong>NOTE:</strong> See <strong>qa-seed-questions.md</strong> for 10 planted questions with model answers. Tie every Q&A answer back to the offer or a specific module.</span>
+
+  <hr>
+
+  <div class="subsection">
+    <h3>Emergency Pivots</h3>
+  </div>
+
+  <div class="pivot">
+    <strong>If energy is low during content:</strong> "Real quick — drop in the chat, who here is SERIOUS about making this change this year? Type 'SERIOUS' right now." Read the responses aloud. Rebuild momentum before continuing.
+  </div>
+
+  <div class="pivot">
+    <strong>If chat goes quiet during the pitch:</strong> "I'm seeing some people who already joined — welcome! If you haven't joined yet, what's holding you back? Drop it in the chat and I'll address it right now."
+  </div>
+
+  <div class="pivot">
+    <strong>If tech issues arise:</strong> [Stay calm. Acknowledge briefly.] "Hey — bear with me for a second. [Fix issue.] Alright, we're back. Where were we..." Then keep going without dwelling on it.
+  </div>
+
+  <hr>
+
+  <div class="subsection">
+    <h3>Sign-Off</h3>
+  </div>
+
+  <p class="script">"Thank you for spending 90 minutes with me today. This stuff works — TK, E-Man, and Kevin are proof. The only question is whether you're going to be next. I hope to see you inside The Retainer Flywheel. Link is in the chat. See you on the inside."</p>
+
+  
+</div><!-- end .page -->
+
+</body>
+</html>
